@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Keyboard controls</title>
+</head>
+<body>
+	<iframe src="http://192.168.1.9:8080/stream_simple.html" width="100%" height="400" frameborder="0"></iframe>
+	<table width="100%">
+		<tbody>
+			<tr>
+				<td width="50%">
+					<table width="100%" style="padding-left: 45%">
+						<tr><br /><br /><br /><br /></tr>
+					<tr>
+						<td>
+							<div style="float: left;">
+								<img src="http://i.imgur.com/mlTbADv.png?1" border="0" usemap="#BucketMap" />
+								<map name="BucketMap">
+								<area onmousedown="up()" onmouseup="up()" shape="rect" coords="4,2,98,107" />
+								<area onmousedown="down()" onmouseup="down()" shape="rect" coords="3,116,98,218" />
+								</map>
+							</div>
+
+							<div style="float: left; padding-left: 20px;">
+								<img src="http://i.imgur.com/0y4Dw7J.png" border="0" usemap="#TiltMap" />
+								<map name="TiltMap" >
+								<area onmousedown="tiltUp()" onmouseup="tiltUp()" shape="rect" coords="1,4,97,107"  />
+								<area onmousedown="tiltDown()" onmouseup="tiltDown()" shape="rect" coords="2,116,95,220"  />
+								</map>
+							</div>
+
+						</td>
+					</tr>
+					</table>
+				</td>
+				<td width="50%">
+					<table width="100%" style="padding-left: 10%">
+					<tr>
+						<!-- https://openclipart.org/image/2400px/svg_to_png/166861/glossy-light-orange-button.png -->
+			<img id="lights" onclick="lights()" style="float: right; padding-right: 30%;" width="64" heigth="64" src="http://i.imgur.com/2jQhGE5.jpg?1">
+					</tr>
+					<tr>
+						<td>
+							<img src="http://www.101computing.net/wp/wp-content/uploads/arrowKeys.png" border="0" usemap="#MainMap" />
+							<map name="MainMap">
+							<area onmousedown="mforward()" onmouseup="mforward()" shape="rect" coords="122,6,219,106"/>
+							<area onmousedown="mleft()" onmouseup="mleft()" shape="rect" coords="17,117,108,217" />
+							<area onmousedown="mback()" onmouseup="mback()" shape="rect" coords="123,117,216,218" />
+							<area onmousedown="right()" onmouseup="right()" shape="rect" coords="228,118,322,218" />
+							</map>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script type="text/javascript" src="files/imageMapResizer.min.js"></script>
+  <script type="text/javascript">
+    $('map').imageMapResize();
+  </script>
+
+<script>
+	var lightStat = false;
+	function lights() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=lights", true);
+		xhr.send();
+		if (!lightStat) {
+			document.getElementById("lights").src="http://i.imgur.com/lp5pyT2.jpg?1";
+			lightStat = true;
+		} else {
+			document.getElementById("lights").src="http://i.imgur.com/2jQhGE5.jpg?1";
+			lightStat = false
+		}
+	}
+	function mforward() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=forward", true);
+		xhr.send();
+	}
+	function mback() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=back", true);
+		xhr.send();
+	}
+	function mleft() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=left", true);
+		xhr.send();
+	}
+	function mright() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=right", true);
+		xhr.send();	
+	}
+
+	function up() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=up", true);
+		xhr.send();	
+	}
+	function down() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=down", true);
+		xhr.send();	
+	}
+	function tiltUp() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=tilt up", true);
+		xhr.send();	
+	}
+	function tiltDown() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "http://127.0.0.1/cgi-bin/control.cgi?q=tilt down", true);
+		xhr.send();	
+	}
+</script>
+
+<script>
+	var forward = true; //38
+	var back = true; //40
+	var left = true; //37
+	var right = true; //39
+	var bUp = true; //87
+	var bDown = true; //83
+	var tUp = true; //68
+	var tDown = true; //65
+
+	document.addEventListener('keydown', function(event) {
+		if (event.keyCode == 76) {
+			lights();
+		}
+	});
+
+	document.addEventListener('keydown', function(event) {
+		if (event.keyCode == 40) {
+			if (!back) return;
+			mback();
+			back = false;
+		} else if (event.keyCode == 37) {
+			if (!left) return;
+			mleft();
+			left = false;
+		} else if (event.keyCode == 38) {
+			console.log(forward);
+			if (!forward) return;
+			mforward();
+			forward = false;
+		} else if (event.keyCode == 39) {
+			if (!right) return;
+			mright();
+			right = false
+		} else if (event.keyCode == 87) {
+			if (!bUp) return;
+			up();
+			bUp = false;
+		} else if (event.keyCode == 83) {
+			if (!bDown) return;
+			down();
+			bDown = false;
+		} else if (event.keyCode == 68) {
+			if (!tDown) return;
+			tiltDown();
+			tDown = false;
+		} else if (event.keyCode == 65) {
+			if (!tUp) return;
+			tiltUp();
+			tUp = false;
+		}
+	});
+
+	document.addEventListener('keyup', function(event) {
+		if (event.keyCode == 40) {
+			mback();
+			back = true;
+		} else if (event.keyCode == 37) {
+			mleft();
+			left = true;
+		} else if (event.keyCode == 38) {
+			mforward();
+			forward = true;
+		} else if (event.keyCode == 39) {
+			mright();
+			right = true;
+		} else if (event.keyCode == 87) {
+			up();
+			bUp = true;
+		} else if (event.keyCode == 83) {
+			down();
+			bDown = true;
+		} else if (event.keyCode == 68) {
+			tiltDown();
+			tDown = true;
+		} else if (event.keyCode == 65) {
+			tiltUp();
+			tUp = true;
+		}
+	});
+</script>
+
+</body>
+</html>
